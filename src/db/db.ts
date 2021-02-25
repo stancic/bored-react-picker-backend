@@ -10,7 +10,7 @@ const pool = mysql.createPool({
 
 let database: any = {};
 
-database.all = () => {
+database.getAll = () => {
   return new Promise((resolve, reject) => {
     pool.query("SELECT * FROM User", (err, results) => {
       if (err) {
@@ -21,7 +21,7 @@ database.all = () => {
   });
 };
 
-database.one = (id) => {
+database.getOne = (id) => {
   return new Promise((resolve, reject) => {
     pool.query("SELECT * FROM User WHERE Id = ?", [id], (err, results) => {
       if (err) {
