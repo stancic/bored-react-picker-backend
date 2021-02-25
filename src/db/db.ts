@@ -2,10 +2,10 @@ const mysql = require("mysql");
 
 const pool = mysql.createPool({
   password: "",
-  user: process.env.DATABASE_USERNAME,
-  database: process.env.DATABASE_NAME,
-  host: process.env.DATABASE_SERVER,
-  port: process.env.DATABASE_PORT,
+  user: "root",
+  database: "bored_movie_picker",
+  host: "localhost",
+  port: "3306",
 });
 
 let database: any = {};
@@ -21,14 +21,38 @@ database.getAll = () => {
   });
 };
 
-database.getOne = (id) => {
+database.getOne = (Username: string, Email: string) => {
   return new Promise((resolve, reject) => {
-    pool.query("SELECT * FROM User WHERE Id = ?", [id], (err, results) => {
-      if (err) {
-        return reject(err);
+    pool.query(
+      "SELECT * FROM User WHERE Username = ? OR Email = ?",
+      [Username, Email],
+      (err, results) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(results[0]);
       }
-      return resolve(results[0]);
-    });
+    );
+  });
+};
+
+database.signUp = (
+  Id: string,
+  Email: string,
+  Username: string,
+  Password: string
+) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "INSERT INTO User (Id, Email, Username, Password) VALUES (?, ?, ?, ?)",
+      [Id, Username, Email, Password],
+      (err, result) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(result);
+      }
+    );
   });
 };
 module.exports = database;
