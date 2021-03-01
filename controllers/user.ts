@@ -1,16 +1,11 @@
-const models = require("../models");
+import { User } from "../models/user";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // GET ALL USERS
-const getAll = (request, response) => {
-  models.User.findAll()
-    .then((users) => {
-      response.json(users);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+const getAll = async (request, response) => {
+  const users = await User.findAll();
+  response.json(users);
 };
 
 module.exports = {
