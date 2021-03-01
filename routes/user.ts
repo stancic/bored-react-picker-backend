@@ -8,4 +8,5 @@ router.get("/", async (request, response) => {
 });
 router.get("/users", userController.getAll);
 router.post("/signup", userController.signUp);
+router.post("/login", userController.login);
 module.exports = router;
