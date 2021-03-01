@@ -1,5 +1,6 @@
 import { User } from "../models/user";
 import { v4 as uuidv4 } from "uuid";
+require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -49,7 +50,60 @@ const signUp = async (request, response) => {
   }
 };
 
+// LOGIN USER
+const login = async (request, response) => {
+  const body = request.body;
+  const userEmailLogin = await User.findOne({
+    where: { email: body.usernameOrEmail },
+  });
+
+  const userUsernameLogin = await User.findOne({
+    where: { username: body.usernameOrEmail },
+  });
+
+  if (!(userEmailLogin || userUsernameLogin)) {
+    response.status(401).json({ error: "Invalid username or email" });
+  }
+
+  if (userEmailLogin) {
+    const correctPassword = null
+      ? false
+      : await bcrypt.compare(body.password, userEmailLogin.password);
+    if (!correctPassword) {
+      response.status(401).json({ error: "Invalid password" });
+    } else {
+      const userToken = {
+        username: userEmailLogin.username,
+        id: userEmailLogin.id,
+      };
+      const token = jwt.sign(userToken, process.env.SECRET);
+      response.status(200).send({
+        message: `${userEmailLogin.username} succesfully logged in`,
+        token,
+      });
+    }
+  } else if (userUsernameLogin) {
+    const correctPassword = null
+      ? false
+      : await bcrypt.compare(body.password, userUsernameLogin.password);
+    if (!correctPassword) {
+      response.status(401).json({ error: "Invalid password" });
+    } else {
+      const userToken = {
+        username: userUsernameLogin.username,
+        id: userUsernameLogin.id,
+      };
+      const token = jwt.sign(userToken, process.env.SECRET);
+      response.status(200).send({
+        message: `${userUsernameLogin.username} succesfully logged in`,
+        token,
+      });
+    }
+  }
+};
+
 module.exports = {
   getAll: getAll,
   signUp: signUp,
+  login: login,
 };
