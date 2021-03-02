@@ -1,4 +1,5 @@
 export {};
+import "reflect-metadata";
 const express = require("express");
 const userRoutes = require("./routes/user");
 const app = express();
