@@ -1,5 +1,5 @@
 import * as express from "express";
-const userController = require("../controllers/user");
+import * as userController from "../controllers/user";
 const router = express.Router();
 router.get("/", async (request, response) => {
   response.json({
