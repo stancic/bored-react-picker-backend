@@ -7,13 +7,13 @@ import * as jwt from "jsonwebtoken";
 require("dotenv").config();
 
 // GET ALL USERS
-const getAll = async (request, response) => {
+export const getAll = async (request, response) => {
   const users = await User.findAll();
   response.json(users);
 };
 
 // CREATE USER
-const signUp = async (request, response) => {
+export const signUp = async (request, response) => {
   const body = request.body;
   let userBodyToClass = plainToClass(UserCreate, body);
 
@@ -68,7 +68,7 @@ const signUp = async (request, response) => {
 };
 
 // LOGIN USER
-const login = async (request, response) => {
+export const login = async (request, response) => {
   const body = request.body;
   let userLogin;
   if (body.usernameOrEmail.includes("@")) {
@@ -100,10 +100,4 @@ const login = async (request, response) => {
   } else {
     response.status(401).json({ error: "Invalid username or email" });
   }
-};
-
-module.exports = {
-  getAll: getAll,
-  signUp: signUp,
-  login: login,
 };
