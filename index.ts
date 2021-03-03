@@ -1,6 +1,5 @@
-export {};
 import "reflect-metadata";
-const express = require("express");
+import * as express from "express";
 const userRoutes = require("./routes/user");
 const app = express();
 require("dotenv").config();
