@@ -2,10 +2,9 @@ import { User, UserCreate } from "../models/user";
 import { plainToClass } from "class-transformer";
 import { validate, validateOrReject } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
-
+import * as bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
 require("dotenv").config();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 // GET ALL USERS
 const getAll = async (request, response) => {

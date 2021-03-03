@@ -1,4 +1,4 @@
-const express = require("express");
+import * as express from "express";
 const userController = require("../controllers/user");
 const router = express.Router();
 router.get("/", async (request, response) => {
