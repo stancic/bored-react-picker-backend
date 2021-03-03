@@ -15,7 +15,7 @@ export const getAll = async (request, response) => {
 // CREATE USER
 export const signUp = async (request, response) => {
   const body = request.body;
-  let userBodyToClass = plainToClass(UserCreate, body);
+  const userBodyToClass = plainToClass(UserCreate, body);
 
   validate(userBodyToClass).then(async (errors) => {
     if (errors.length > 0) {
