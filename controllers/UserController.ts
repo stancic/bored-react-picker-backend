@@ -1,4 +1,4 @@
-import { User, UserCreate } from "../models/user";
+import { User, UserCreate } from "../models/UserModel";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { v4 as uuidv4 } from "uuid";

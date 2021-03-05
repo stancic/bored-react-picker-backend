@@ -1,4 +1,7 @@
-import { FavoriteMovie, FavoriteMovieCreate } from "../models/favorite_movie";
+import {
+  FavoriteMovie,
+  FavoriteMovieCreate,
+} from "../models/FavoriteMovieModel";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
@@ -37,7 +40,8 @@ export const addMovieToFavoriteMovies = async (request, response) => {
         });
       } catch (error) {
         response.status(500).json({
-          message: "Movie is already on the list",
+          message:
+            "Movie is already on the list or you're doing somethin not allowed",
         });
       }
     }

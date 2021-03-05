@@ -1,4 +1,4 @@
-import { WatchedMovie, WatchedMovieCreate } from "../models/watched_movie";
+import { WatchedMovie, WatchedMovieCreate } from "../models/WatchedMovieModel";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
