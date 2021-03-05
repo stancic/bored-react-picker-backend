@@ -1,7 +1,8 @@
 import * as express from "express";
-import * as favoriteMovieController from "../controllers/FavoriteMovieController";
+import { FavoriteMovieController } from "../controllers/FavoriteMovieController";
 const favoriteMovieRouter = express.Router();
 
+const favoriteMovieController = new FavoriteMovieController();
 favoriteMovieRouter.get("/all", favoriteMovieController.getAll);
 favoriteMovieRouter.post(
   "/add",
