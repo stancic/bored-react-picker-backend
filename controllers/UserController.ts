@@ -6,98 +6,99 @@ import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 require("dotenv").config();
 
-// GET ALL USERS
-export const getAll = async (request, response) => {
-  const users = await User.findAll();
-  response.json(users);
-};
+export class UserController {
+  getAll = async (request, response) => {
+    const users = await User.findAll();
+    response.json(users);
+  };
 
-// CREATE USER
-export const signUp = async (request, response) => {
-  const body = request.body;
-  const userBodyToClass = plainToClass(UserCreate, body);
+  signUp = async (request, response) => {
+    const body = request.body;
+    const userBodyToClass = plainToClass(UserCreate, body);
 
-  validate(userBodyToClass).then(async (errors) => {
-    if (errors.length > 0) {
-      response.status(400).json({
-        message: "Validation failed.",
-        errors,
-      });
-    } else {
-      let userId = uuidv4();
-      const saltRounds = 10;
-      const passwordHash = await bcrypt.hash(body.password, saltRounds);
-
-      // If user exists with one username but different mail and vice versa
-      const userWithUsernameExists = await User.findOne({
-        where: { username: body.username },
-      });
-      const userWithEmailExists = await User.findOne({
-        where: { email: body.email },
-      });
-
-      const user = {
-        id: userId,
-        username: body.username,
-        email: body.email,
-        password: passwordHash,
-      };
-
-      if (userWithUsernameExists || userWithEmailExists) {
-        response.status(409).json({
-          message: "Username or email already exists",
+    validate(userBodyToClass).then(async (errors) => {
+      if (errors.length > 0) {
+        response.status(400).json({
+          message: "Validation failed.",
+          errors,
         });
       } else {
-        try {
-          let result = await User.create({
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            password: user.password,
+        let userId = uuidv4();
+        const saltRounds = 10;
+        const passwordHash = await bcrypt.hash(body.password, saltRounds);
+
+        // If user exists with one username but different mail and vice versa
+        const userWithUsernameExists = await User.findOne({
+          where: { username: body.username },
+        });
+        const userWithEmailExists = await User.findOne({
+          where: { email: body.email },
+        });
+
+        const user = {
+          id: userId,
+          username: body.username,
+          email: body.email,
+          password: passwordHash,
+        };
+
+        if (userWithUsernameExists || userWithEmailExists) {
+          response.status(409).json({
+            message: "Username or email already exists",
           });
-          response.status(200).json({
-            message: `User ${user.username} created`,
-            result,
-          });
-        } catch (error) {
-          response.sendStatus(500);
+        } else {
+          try {
+            let result = await User.create({
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              password: user.password,
+            });
+            response.status(200).json({
+              message: `User ${user.username} created`,
+              result,
+            });
+          } catch (error) {
+            response.sendStatus(500);
+          }
         }
       }
-    }
-  });
-};
+    });
+  };
 
-// LOGIN USER
-export const login = async (request, response) => {
-  const body = request.body;
-  let userLogin;
-  if (body.usernameOrEmail.includes("@")) {
-    userLogin = await User.findOne({
-      where: { email: body.usernameOrEmail },
-    });
-  } else {
-    userLogin = await User.findOne({
-      where: { username: body.usernameOrEmail },
-    });
-  }
-  if (userLogin) {
-    const correctPassword = null
-      ? false
-      : await bcrypt.compare(body.password, userLogin.password);
-    if (!correctPassword) {
-      response.status(401).json({ error: "Invalid password" });
+  login = async (request, response) => {
+    const body = request.body;
+    let userLogin;
+    if (body.usernameOrEmail.includes("@")) {
+      userLogin = await User.findOne({
+        where: { email: body.usernameOrEmail },
+      });
     } else {
-      const userToken = {
-        username: userLogin.username,
-        id: userLogin.id,
-      };
-      const token = jwt.sign(userToken, process.env.SECRET);
-      response.status(200).send({
-        message: `${userLogin.username} succesfully logged in`,
-        token,
+      userLogin = await User.findOne({
+        where: { username: body.usernameOrEmail },
       });
     }
-  } else {
-    response.status(401).json({ error: "Invalid username or email" });
-  }
-};
+    if (userLogin) {
+      const correctPassword = null
+        ? false
+        : await bcrypt.compare(body.password, userLogin.password);
+      if (!correctPassword) {
+        response.status(401).json({ error: "Invalid password" });
+      } else {
+        const userToken = {
+          username: userLogin.username,
+          id: userLogin.id,
+        };
+        const token = jwt.sign(userToken, process.env.SECRET, {
+          expiresIn: "1h",
+        });
+        response.status(200).send({
+          message: `${userLogin.username} succesfully logged in`,
+          token,
+        });
+      }
+    } else {
+      response.status(401).json({ error: "Invalid username or email" });
+    }
+  };
+}
