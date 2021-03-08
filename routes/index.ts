@@ -6,9 +6,9 @@ import ratedMovieRouter from "./RatedMovieRouter";
 
 const router = express.Router();
 
-router.use(userRouter);
-router.use("/favoriteMovies", favoriteMovieRouter);
-router.use("/watchedMovies", watchedMovieRouter);
-router.use("/ratedMovies", ratedMovieRouter);
+router.use("/users", userRouter);
+router.use("/favorite-movies", favoriteMovieRouter);
+router.use("/watched-movies", watchedMovieRouter);
+router.use("/rated-movies", ratedMovieRouter);
 
 export default router;
