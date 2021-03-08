@@ -5,11 +5,11 @@ import { RatedMovieCreate } from "../models/RatedMovieModel";
 const ratedMovieRouter = express.Router();
 
 const ratedMovieController = new RatedMovieController();
-ratedMovieRouter.get(
+ratedMovieRouter.get("", ratedMovieController.getAll);
+ratedMovieRouter.post(
   "",
   bodyValidation(RatedMovieCreate),
-  ratedMovieController.getAll
+  ratedMovieController.rateMovie
 );
-ratedMovieRouter.post("", ratedMovieController.rateMovie);
 
 export default ratedMovieRouter;
