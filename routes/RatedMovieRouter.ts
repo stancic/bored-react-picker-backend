@@ -1,8 +1,9 @@
 import * as express from "express";
-import * as RatedMovieController from "../controllers/RatedMovieController";
+import { RatedMovieController } from "../controllers/RatedMovieController";
 const ratedMovieRouter = express.Router();
 
-ratedMovieRouter.get("/all", RatedMovieController.getAll);
-ratedMovieRouter.post("/rate", RatedMovieController.rateMovie);
+const ratedMovieController = new RatedMovieController();
+ratedMovieRouter.get("", ratedMovieController.getAll);
+ratedMovieRouter.post("", ratedMovieController.rateMovie);
 
 export default ratedMovieRouter;
