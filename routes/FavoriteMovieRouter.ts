@@ -3,10 +3,7 @@ import { FavoriteMovieController } from "../controllers/FavoriteMovieController"
 const favoriteMovieRouter = express.Router();
 
 const favoriteMovieController = new FavoriteMovieController();
-favoriteMovieRouter.get("/all", favoriteMovieController.getAll);
-favoriteMovieRouter.post(
-  "/add",
-  favoriteMovieController.addMovieToFavoriteMovies
-);
+favoriteMovieRouter.get("", favoriteMovieController.getAll);
+favoriteMovieRouter.post("", favoriteMovieController.addMovieToFavoriteMovies);
 
 export default favoriteMovieRouter;
