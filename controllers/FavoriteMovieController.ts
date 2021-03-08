@@ -42,7 +42,7 @@ export class FavoriteMovieController {
         } catch (error) {
           response.status(500).json({
             message:
-              "Movie is already on the list or you're doing somethin not allowed",
+              "Movie is already on the list or you're doing something not allowed",
           });
         }
       }
