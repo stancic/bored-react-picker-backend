@@ -1,8 +1,9 @@
 import * as express from "express";
-import * as watchedMovieController from "../controllers/WatchedMovieController";
+import { WatchedMovieController } from "../controllers/WatchedMovieController";
 const watchedMovieRouter = express.Router();
 
-watchedMovieRouter.get("/all", watchedMovieController.getAll);
-watchedMovieRouter.post("/add", watchedMovieController.addMovieToWatchedMovies);
+const watchedMovieController = new WatchedMovieController();
+watchedMovieRouter.get("/", watchedMovieController.getAll);
+watchedMovieRouter.post("/", watchedMovieController.addMovieToWatchedMovies);
 
 export default watchedMovieRouter;
