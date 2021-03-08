@@ -1,13 +1,17 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "./index";
-import { IsDefined } from "class-validator";
+import { IsDefined, IsInt, IsUUID } from "class-validator";
 
 export class FavoriteMovieCreate {
+  @IsUUID()
+  @IsDefined()
   id: string;
 
+  @IsInt()
   @IsDefined()
   movieId: number;
 
+  @IsUUID()
   @IsDefined()
   userId: string;
 }
