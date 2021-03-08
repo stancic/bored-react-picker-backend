@@ -44,4 +44,12 @@ export class WatchedMovieController {
       }
     });
   };
+
+  removeWatchedMovie = async (request, response) => {
+    const id = request.params.id;
+    const watchedMovie = await WatchedMovie.destroy({ where: { id: id } });
+    response.json({
+      message: "Movie removed from watched movies",
+    });
+  };
 }

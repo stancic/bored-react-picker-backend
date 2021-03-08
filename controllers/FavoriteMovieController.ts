@@ -48,4 +48,12 @@ export class FavoriteMovieController {
       }
     });
   };
+
+  removeFavoriteMovie = async (request, response) => {
+    const id = request.params.id;
+    const favoriteMovie = await FavoriteMovie.destroy({ where: { id: id } });
+    response.json({
+      message: "Movie removed from favorite movies",
+    });
+  };
 }
