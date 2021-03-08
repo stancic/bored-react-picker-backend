@@ -29,7 +29,8 @@ export class WatchedMovieController {
       });
     } catch (error) {
       res.status(500).json({
-        message: "Movie is already on the list",
+        message:
+          "Movie is already on the list or you're doing something not allowed.",
       });
     }
   };
