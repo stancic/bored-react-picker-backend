@@ -3,16 +3,14 @@ import { sequelize } from "./index";
 import { IsDefined, IsInt, IsUUID } from "class-validator";
 
 export class FavoriteMovieCreate {
-  @IsUUID()
-  @IsDefined()
   id: string;
 
   @IsInt()
   @IsDefined()
   movieId: number;
 
-  @IsUUID()
   @IsDefined()
+  @IsUUID()
   userId: string;
 }
 

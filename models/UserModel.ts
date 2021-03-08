@@ -14,8 +14,6 @@ const testEmailRegEx = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
 const testPasswordRegEx = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
 
 export class UserCreate {
-  @IsUUID()
-  @IsDefined()
   id: string;
 
   @IsDefined()

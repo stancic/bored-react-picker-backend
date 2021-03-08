@@ -3,8 +3,6 @@ import { sequelize } from "./index";
 import { IsDefined, IsInt, IsUUID } from "class-validator";
 
 export class WatchedMovieCreate {
-  @IsUUID()
-  @IsDefined()
   id: string;
 
   @IsInt()
