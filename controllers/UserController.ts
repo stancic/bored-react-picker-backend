@@ -15,9 +15,9 @@ export class UserController {
 
   signUp = async (req: Request, res: Response) => {
     const body = req.body;
-    const userBodyToClass = plainToClass(UserCreate, body);
+    const userBodyToInstance = plainToClass(UserCreate, body);
 
-    validate(userBodyToClass).then(async (errors) => {
+    validate(userBodyToInstance).then(async (errors) => {
       if (errors.length > 0) {
         res.status(400).json({
           message: "Validation failed.",

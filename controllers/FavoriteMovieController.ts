@@ -15,9 +15,9 @@ export class FavoriteMovieController {
 
   addMovieToFavoriteMovies = async (req: Request, res: Response) => {
     const body = req.body;
-    const favoriteMovieBodyToClass = plainToClass(FavoriteMovieCreate, body);
+    const favoriteMovieBodyToInstance = plainToClass(FavoriteMovieCreate, body);
 
-    validate(favoriteMovieBodyToClass).then(async (errors) => {
+    validate(favoriteMovieBodyToInstance).then(async (errors) => {
       if (errors.length > 0) {
         res.status(400).json({
           message: "Validation failed",

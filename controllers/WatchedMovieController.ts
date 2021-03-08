@@ -12,9 +12,9 @@ export class WatchedMovieController {
 
   addMovieToWatchedMovies = async (req: Request, res: Response) => {
     const body = req.body;
-    const watchedMovieBodyToClass = plainToClass(WatchedMovieCreate, body);
+    const watchedMovieBodyToInstance = plainToClass(WatchedMovieCreate, body);
 
-    validate(watchedMovieBodyToClass).then(async (errors) => {
+    validate(watchedMovieBodyToInstance).then(async (errors) => {
       if (errors.length > 0) {
         res.status(400).json({
           message: "Validation failed",

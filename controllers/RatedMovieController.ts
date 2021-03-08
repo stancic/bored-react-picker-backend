@@ -12,9 +12,9 @@ export class RatedMovieController {
 
   rateMovie = async (req: Request, res: Response) => {
     const body = req.body;
-    const ratedMovieBodyToClass = plainToClass(RatedMovieCreate, body);
+    const ratedMovieBodyToInstance = plainToClass(RatedMovieCreate, body);
 
-    validate(ratedMovieBodyToClass).then(async (errors) => {
+    validate(ratedMovieBodyToInstance).then(async (errors) => {
       if (errors.length > 0) {
         res.status(400).json({
           message: "Validation error",
