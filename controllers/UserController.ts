@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { User, UserCreate } from "../models/UserModel";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
@@ -7,18 +8,18 @@ import * as jwt from "jsonwebtoken";
 require("dotenv").config();
 
 export class UserController {
-  getAll = async (request, response) => {
+  getAll = async (req: Request, res: Response) => {
     const users = await User.findAll();
-    response.json(users);
+    res.json(users);
   };
 
-  signUp = async (request, response) => {
-    const body = request.body;
+  signUp = async (req: Request, res: Response) => {
+    const body = req.body;
     const userBodyToClass = plainToClass(UserCreate, body);
 
     validate(userBodyToClass).then(async (errors) => {
       if (errors.length > 0) {
-        response.status(400).json({
+        res.status(400).json({
           message: "Validation failed.",
           errors,
         });
@@ -43,7 +44,7 @@ export class UserController {
         };
 
         if (userWithUsernameExists || userWithEmailExists) {
-          response.status(409).json({
+          res.status(409).json({
             message: "Username or email already exists",
           });
         } else {
@@ -54,20 +55,20 @@ export class UserController {
               email: user.email,
               password: user.password,
             });
-            response.status(200).json({
+            res.status(200).json({
               message: `User ${user.username} created`,
               result,
             });
           } catch (error) {
-            response.sendStatus(500);
+            res.sendStatus(500);
           }
         }
       }
     });
   };
 
-  login = async (request, response) => {
-    const body = request.body;
+  login = async (req: Request, res: Response) => {
+    const body = req.body;
     let userLogin;
     if (body.usernameOrEmail.includes("@")) {
       userLogin = await User.findOne({
@@ -83,7 +84,7 @@ export class UserController {
         ? false
         : await bcrypt.compare(body.password, userLogin.password);
       if (!correctPassword) {
-        response.status(401).json({ error: "Invalid password" });
+        res.status(401).json({ error: "Invalid password" });
       } else {
         const userToken = {
           username: userLogin.username,
@@ -92,13 +93,13 @@ export class UserController {
         const token = jwt.sign(userToken, process.env.SECRET, {
           expiresIn: "1h",
         });
-        response.status(200).send({
+        res.status(200).send({
           message: `${userLogin.username} succesfully logged in`,
           token,
         });
       }
     } else {
-      response.status(401).json({ error: "Invalid username or email" });
+      res.status(401).json({ error: "Invalid username or email" });
     }
   };
 }

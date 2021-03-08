@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import {
   FavoriteMovie,
   FavoriteMovieCreate,
@@ -7,18 +8,18 @@ import { validate } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
 
 export class FavoriteMovieController {
-  getAll = async (request, response) => {
+  getAll = async (req: Request, res: Response) => {
     const favoriteMovies = await FavoriteMovie.findAll();
-    response.json(favoriteMovies);
+    res.json(favoriteMovies);
   };
 
-  addMovieToFavoriteMovies = async (request, response) => {
-    const body = request.body;
+  addMovieToFavoriteMovies = async (req: Request, res: Response) => {
+    const body = req.body;
     const favoriteMovieBodyToClass = plainToClass(FavoriteMovieCreate, body);
 
     validate(favoriteMovieBodyToClass).then(async (errors) => {
       if (errors.length > 0) {
-        response.status(400).json({
+        res.status(400).json({
           message: "Validation failed",
           errors,
         });
@@ -35,12 +36,12 @@ export class FavoriteMovieController {
             movieId: favoriteMovie.movieId,
             userId: favoriteMovie.userId,
           });
-          response.status(200).json({
+          res.status(200).json({
             message: "Movie added to favorite movies",
             result,
           });
         } catch (error) {
-          response.status(500).json({
+          res.status(500).json({
             message:
               "Movie is already on the list or you're doing something not allowed",
           });
@@ -49,10 +50,10 @@ export class FavoriteMovieController {
     });
   };
 
-  removeFavoriteMovie = async (request, response) => {
-    const id = request.params.id;
+  removeFavoriteMovie = async (req: Request, res: Response) => {
+    const id = req.params.id;
     const favoriteMovie = await FavoriteMovie.destroy({ where: { id: id } });
-    response.json({
+    res.json({
       message: "Movie removed from favorite movies",
     });
   };

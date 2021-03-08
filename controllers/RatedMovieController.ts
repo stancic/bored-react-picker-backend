@@ -1,21 +1,22 @@
+import { Request, Response } from "express";
 import { RatedMovie, RatedMovieCreate } from "../models/RatedMovieModel";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
 
 export class RatedMovieController {
-  getAll = async (request, response) => {
+  getAll = async (req: Request, res: Response) => {
     const ratedMovies = await RatedMovie.findAll();
-    response.json(ratedMovies);
+    res.json(ratedMovies);
   };
 
-  rateMovie = async (request, response) => {
-    const body = request.body;
+  rateMovie = async (req: Request, res: Response) => {
+    const body = req.body;
     const ratedMovieBodyToClass = plainToClass(RatedMovieCreate, body);
 
     validate(ratedMovieBodyToClass).then(async (errors) => {
       if (errors.length > 0) {
-        response.status(400).json({
+        res.status(400).json({
           message: "Validation error",
           errors,
         });
@@ -34,12 +35,12 @@ export class RatedMovieController {
             movieId: ratedMovie.movieId,
             userId: ratedMovie.userId,
           });
-          response.status(200).json({
+          res.status(200).json({
             message: "Movie rated",
             result,
           });
         } catch (error) {
-          response.status(500).json({
+          res.status(500).json({
             message:
               "You've already rated this movie or you're doing something not allowed",
           });

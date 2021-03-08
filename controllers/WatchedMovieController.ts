@@ -1,21 +1,22 @@
+import { Request, Response } from "express";
 import { WatchedMovie, WatchedMovieCreate } from "../models/WatchedMovieModel";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
 
 export class WatchedMovieController {
-  getAll = async (request, response) => {
+  getAll = async (req: Request, res: Response) => {
     const watchedMovies = await WatchedMovie.findAll();
-    response.json(watchedMovies);
+    res.json(watchedMovies);
   };
 
-  addMovieToWatchedMovies = async (request, response) => {
-    const body = request.body;
+  addMovieToWatchedMovies = async (req: Request, res: Response) => {
+    const body = req.body;
     const watchedMovieBodyToClass = plainToClass(WatchedMovieCreate, body);
 
     validate(watchedMovieBodyToClass).then(async (errors) => {
       if (errors.length > 0) {
-        response.status(400).json({
+        res.status(400).json({
           message: "Validation failed",
           errors,
         });
@@ -32,12 +33,12 @@ export class WatchedMovieController {
             movieId: watchedMovie.movieId,
             userId: watchedMovie.userId,
           });
-          response.status(200).json({
+          res.status(200).json({
             message: "Movie added to watched movies",
             result,
           });
         } catch (error) {
-          response.status(500).json({
+          res.status(500).json({
             message: "Movie is already on the list",
           });
         }
@@ -45,10 +46,10 @@ export class WatchedMovieController {
     });
   };
 
-  removeWatchedMovie = async (request, response) => {
-    const id = request.params.id;
+  removeWatchedMovie = async (req: Request, res: Response) => {
+    const id = req.params.id;
     const watchedMovie = await WatchedMovie.destroy({ where: { id: id } });
-    response.json({
+    res.json({
       message: "Movie removed from watched movies",
     });
   };
