@@ -22,6 +22,7 @@ export class UserCreate {
   username: string;
 
   @IsDefined()
+  @MinLength(5, { message: "Email is not in valid format." })
   @Matches(testEmailRegEx, { message: "Email is not in valid format." })
   email: string;
 
