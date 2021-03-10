@@ -47,9 +47,9 @@ export class UserController {
         res.status(200).json({
           message: `User ${user.username} created`,
           user: {
-            id: user.id,
-            username: user.username,
-            email: user.email,
+            id: result.id,
+            username: result.username,
+            email: result.email,
           },
         });
       } catch (error) {
