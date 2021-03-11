@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { request, Request, Response } from "express";
 import {
   FavoriteMovie,
   FavoriteMovieCreate,
@@ -9,6 +9,14 @@ export class FavoriteMovieController {
   getAll = async (req: Request, res: Response) => {
     const favoriteMovies = await FavoriteMovie.findAll();
     res.json(favoriteMovies);
+  };
+
+  getFromUser = async (req: Request, res: Response) => {
+    const userId = req.params.userid;
+    const favoriteMoviesFromUser = await FavoriteMovie.findAll({
+      where: { userId: userId },
+    });
+    res.json(favoriteMoviesFromUser);
   };
 
   addMovieToFavoriteMovies = async (req: Request, res: Response) => {
@@ -42,6 +50,7 @@ export class FavoriteMovieController {
     const favoriteMovie = await FavoriteMovie.destroy({ where: { id: id } });
     res.json({
       message: "Movie removed from favorite movies",
+      favoriteMovie,
     });
   };
 }

@@ -9,6 +9,14 @@ export class WatchedMovieController {
     res.json(watchedMovies);
   };
 
+  getFromUser = async (req: Request, res: Response) => {
+    const userId = req.params.userid;
+    const watchedMoviesFromUser = await WatchedMovie.findAll({
+      where: { userId: userId },
+    });
+    res.json(watchedMoviesFromUser);
+  };
+
   addMovieToWatchedMovies = async (req: Request, res: Response) => {
     const body: WatchedMovieCreate = res.locals.body;
     let watchedMovieId = uuidv4();
@@ -40,6 +48,7 @@ export class WatchedMovieController {
     const watchedMovie = await WatchedMovie.destroy({ where: { id: id } });
     res.json({
       message: "Movie removed from watched movies",
+      watchedMovie,
     });
   };
 }
