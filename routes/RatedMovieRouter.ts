@@ -6,7 +6,7 @@ import { RatedMovieCreate } from "../models/RatedMovieModel";
 const ratedMovieRouter = express.Router();
 
 const ratedMovieController = new RatedMovieController();
-ratedMovieRouter.get("", ratedMovieController.getAll);
+ratedMovieRouter.get("", authorize, ratedMovieController.getAll);
 ratedMovieRouter.post(
   "",
   authorize,

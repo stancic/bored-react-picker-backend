@@ -7,7 +7,7 @@ const favoriteMovieRouter = express.Router();
 
 const favoriteMovieController = new FavoriteMovieController();
 
-favoriteMovieRouter.get("", favoriteMovieController.getAll);
+favoriteMovieRouter.get("", authorize, favoriteMovieController.getAll);
 favoriteMovieRouter.post(
   "",
   authorize,

@@ -6,7 +6,7 @@ import { WatchedMovieCreate } from "../models/WatchedMovieModel";
 const watchedMovieRouter = express.Router();
 
 const watchedMovieController = new WatchedMovieController();
-watchedMovieRouter.get("", watchedMovieController.getAll);
+watchedMovieRouter.get("", authorize, watchedMovieController.getAll);
 watchedMovieRouter.post(
   "",
   authorize,
