@@ -8,6 +8,11 @@ const favoriteMovieRouter = express.Router();
 const favoriteMovieController = new FavoriteMovieController();
 
 favoriteMovieRouter.get("", authorize, favoriteMovieController.getAll);
+favoriteMovieRouter.get(
+  "/:userid",
+  authorize,
+  favoriteMovieController.getFromUser
+);
 favoriteMovieRouter.post(
   "",
   authorize,
