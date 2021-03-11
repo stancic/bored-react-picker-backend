@@ -7,6 +7,11 @@ const watchedMovieRouter = express.Router();
 
 const watchedMovieController = new WatchedMovieController();
 watchedMovieRouter.get("", authorize, watchedMovieController.getAll);
+watchedMovieRouter.get(
+  "/:userid",
+  authorize,
+  watchedMovieController.getFromUser
+);
 watchedMovieRouter.post(
   "",
   authorize,
