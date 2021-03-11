@@ -87,6 +87,7 @@ export class UserController {
         res.status(200).send({
           message: `${userLogin.username} succesfully logged in`,
           user: {
+            id: userLogin.id,
             username: userLogin.username,
             email: userLogin.email,
           },
