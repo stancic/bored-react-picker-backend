@@ -10,6 +10,7 @@ export class RatedMovieCreate {
   rate: number;
 
   @IsDefined()
+  @IsNumber()
   movieId: number;
 
   @IsUUID()
