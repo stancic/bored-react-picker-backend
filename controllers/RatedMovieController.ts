@@ -15,7 +15,7 @@ export class RatedMovieController {
     let ratedMovieId = uuidv4();
     const ratedMovie = {
       id: ratedMovieId,
-      rate: Math.round(body.rate),
+      rate: body.rate,
       movieId: body.movieId,
       userId: body.userId,
     };
@@ -34,6 +34,7 @@ export class RatedMovieController {
       res.status(500).json({
         message:
           "You've already rated this movie or you're doing something not allowed",
+        ratedMovie,
       });
     }
   };
