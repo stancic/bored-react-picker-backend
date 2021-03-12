@@ -47,7 +47,9 @@ export class FavoriteMovieController {
 
   removeFavoriteMovie = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const favoriteMovie = await FavoriteMovie.destroy({ where: { id: id } });
+    const favoriteMovie = await FavoriteMovie.destroy({
+      where: { movieId: id },
+    });
     res.json({
       message: "Movie removed from favorite movies",
       favoriteMovie,

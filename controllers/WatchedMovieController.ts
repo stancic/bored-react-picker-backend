@@ -45,7 +45,7 @@ export class WatchedMovieController {
 
   removeWatchedMovie = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const watchedMovie = await WatchedMovie.destroy({ where: { id: id } });
+    const watchedMovie = await WatchedMovie.destroy({ where: { movieId: id } });
     res.json({
       message: "Movie removed from watched movies",
       watchedMovie,
