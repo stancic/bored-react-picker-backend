@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "./index";
 import { IsDefined, MaxLength, Matches, MinLength } from "class-validator";
+import { IUser } from "../types/IUser";
 
 const testUsernameRegEx = /^(?=.{4,31}$)(?![_\W])(?![_\W]{2})\w+(?<!(_{1})[_\W])$/;
 const testEmailRegEx = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
@@ -28,7 +29,7 @@ export class UserCreate {
   password: string;
 }
 
-export const User = sequelize.define<any, any>(
+export const User = sequelize.define<any, IUser>(
   "User",
   {
     id: {
