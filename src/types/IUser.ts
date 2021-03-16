@@ -1,5 +1,3 @@
-import { ModelCtor } from "sequelize/types";
-
 export interface IUser {
   id: string;
   username: string;
