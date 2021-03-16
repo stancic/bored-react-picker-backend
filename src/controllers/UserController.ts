@@ -1,29 +1,43 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { User, UserCreate } from "../models/UserModel";
 import { v4 as uuidv4 } from "uuid";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
+import { injectable } from "tsyringe";
+import UserService from "../services/UserServices";
+import { IUser } from "../types/IUser";
 require("dotenv").config();
 
+@injectable()
 export class UserController {
-  getAll = async (req: Request, res: Response) => {
-    const users = await User.findAll();
-    res.json(users);
+  private _userService: UserService;
+
+  constructor(userService: UserService) {
+    this._userService = userService;
+  }
+
+  GetAllUsersAsync = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const users = await this._userService.FindAllUsersAsync();
+    return res.status(200).json(users);
   };
 
-  signUp = async (req: Request, res: Response) => {
+  SignupAsync = async (req: Request, res: Response, next: NextFunction) => {
     const body: UserCreate = res.locals.body;
     let userId = uuidv4();
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
     // If user exists with one username but different mail and vice versa
-    const userWithUsernameExists = await User.findOne({
-      where: { username: body.username },
-    });
-    const userWithEmailExists = await User.findOne({
-      where: { email: body.email },
-    });
+    const userWithUsernameExists = await this._userService.GetByUsernameAsync(
+      body.username
+    );
+    const userWithEmailExists = await this._userService.GetByEmailAsync(
+      body.username
+    );
 
     const user = {
       id: userId,
@@ -38,12 +52,7 @@ export class UserController {
       });
     } else {
       try {
-        let result = await User.create({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          password: user.password,
-        });
+        let result = await this._userService.PostAsync(user);
         res.status(200).json({
           message: `User ${user.username} created`,
           user: {
@@ -58,17 +67,15 @@ export class UserController {
     }
   };
 
-  login = async (req: Request, res: Response) => {
+  LoginAsync = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body;
-    let userLogin;
+    let userLogin: IUser;
     if (body.usernameOrEmail.includes("@")) {
-      userLogin = await User.findOne({
-        where: { email: body.usernameOrEmail },
-      });
+      userLogin = await this._userService.GetByEmailAsync(body.usernameOrEmail);
     } else {
-      userLogin = await User.findOne({
-        where: { username: body.usernameOrEmail },
-      });
+      userLogin = await this._userService.GetByUsernameAsync(
+        body.usernameOrEmail
+      );
     }
     if (userLogin) {
       const correctPassword = null
