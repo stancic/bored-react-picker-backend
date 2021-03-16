@@ -11,7 +11,7 @@ export default class FavoriteMovieService {
   GetByUserIdAsync = async (
     userId: string
   ): Promise<Array<IMovie> | IMovie> => {
-    return FavoriteMovie.findOne({ where: { userId: userId } });
+    return FavoriteMovie.findAll({ where: { userId: userId } });
   };
 
   PostAsync = async (movie: IMovie): Promise<IMovie> => {
