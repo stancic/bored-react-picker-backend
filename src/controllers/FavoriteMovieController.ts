@@ -4,22 +4,29 @@ import {
   FavoriteMovieCreate,
 } from "../models/FavoriteMovieModel";
 import { v4 as uuidv4 } from "uuid";
+import FavoriteMovieService from "../services/FavoriteMovieServices";
 
 export class FavoriteMovieController {
-  getAll = async (req: Request, res: Response) => {
-    const favoriteMovies = await FavoriteMovie.findAll();
-    res.json(favoriteMovies);
+  private _favoriteMoviesService: FavoriteMovieService;
+  constructor(favoriteMovieService: FavoriteMovieService) {
+    this._favoriteMoviesService = favoriteMovieService;
+  }
+
+  GetAllFavoritesAsync = async (req: Request, res: Response) => {
+    const favoriteMovies = await this._favoriteMoviesService
+      .FindAllFavoriteMoviesAsync;
+    return res.status(200).json(favoriteMovies);
   };
 
-  getFromUser = async (req: Request, res: Response) => {
+  GetFavoritesFromUserAsync = async (req: Request, res: Response) => {
     const userId = req.params.userid;
-    const favoriteMoviesFromUser = await FavoriteMovie.findAll({
-      where: { userId: userId },
-    });
-    res.json(favoriteMoviesFromUser);
+    const favoriteMoviesFromUser = await this._favoriteMoviesService.GetByUserIdAsync(
+      userId
+    );
+    return res.status(200).json(favoriteMoviesFromUser);
   };
 
-  addMovieToFavoriteMovies = async (req: Request, res: Response) => {
+  AddMovieToFavoriteMoviesAsync = async (req: Request, res: Response) => {
     const body: FavoriteMovieCreate = res.locals.body;
     let favoriteMovieId = uuidv4();
     const favoriteMovie = {
@@ -28,11 +35,7 @@ export class FavoriteMovieController {
       userId: body.userId,
     };
     try {
-      let result = await FavoriteMovie.create({
-        id: favoriteMovie.id,
-        movieId: favoriteMovie.movieId,
-        userId: favoriteMovie.userId,
-      });
+      let result = await this._favoriteMoviesService.PostAsync(favoriteMovie);
       res.status(200).json({
         message: "Movie added to favorite movies",
         result,
@@ -45,11 +48,9 @@ export class FavoriteMovieController {
     }
   };
 
-  removeFavoriteMovie = async (req: Request, res: Response) => {
+  RemoveFavoriteMovieAsync = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const favoriteMovie = await FavoriteMovie.destroy({
-      where: { movieId: id },
-    });
+    const favoriteMovie = this._favoriteMoviesService.RemoveByMovieIdAsync(id);
     res.json({
       message: "Movie removed from favorite movies",
       favoriteMovie,
