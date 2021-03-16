@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  FavoriteMovie,
-  FavoriteMovieCreate,
-} from "../models/FavoriteMovieModel";
+import { FavoriteMovieCreate } from "../models/FavoriteMovieModel";
 import { v4 as uuidv4 } from "uuid";
 import FavoriteMovieService from "../services/FavoriteMovieServices";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class FavoriteMovieController {
   private _favoriteMoviesService: FavoriteMovieService;
+
   constructor(favoriteMovieService: FavoriteMovieService) {
     this._favoriteMoviesService = favoriteMovieService;
   }
