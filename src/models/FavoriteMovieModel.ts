@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "./index";
 import { IsDefined, IsNumber, IsUUID } from "class-validator";
+import { IMovie } from "../types/IMovie";
 
 export class FavoriteMovieCreate {
   id: string;
@@ -14,7 +15,7 @@ export class FavoriteMovieCreate {
   userId: string;
 }
 
-export const FavoriteMovie = sequelize.define<any, any>(
+export const FavoriteMovie = sequelize.define<any, IMovie>(
   "FavoriteMovie",
   {
     id: {
