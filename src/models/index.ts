@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Dialect, Sequelize } from "sequelize";
 require("dotenv").config();
 
 const config = {
@@ -15,7 +15,7 @@ export const sequelize = new Sequelize(
   config.username,
   config.password,
   {
-    dialect: "mysql",
+    dialect: config.dialect as Dialect,
     port: 3306,
   }
 );
