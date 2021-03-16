@@ -1,22 +1,44 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { WatchedMovie, WatchedMovieCreate } from "../models/WatchedMovieModel";
 import { v4 as uuidv4 } from "uuid";
+import { injectable } from "tsyringe";
+import WatchedMovieService from "../services/WatchedMovieServices";
 
+@injectable()
 export class WatchedMovieController {
-  getAll = async (req: Request, res: Response) => {
-    const watchedMovies = await WatchedMovie.findAll();
-    res.json(watchedMovies);
+  private _watchedMovieService: WatchedMovieService;
+
+  constructor(watchedMovieService: WatchedMovieService) {
+    this._watchedMovieService = watchedMovieService;
+  }
+
+  GetAllWatchedAsync = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const watchedMovies = await this._watchedMovieService
+      .FindAllWatchedMoviesAsync;
+    return res.status(200).json(watchedMovies);
   };
 
-  getFromUser = async (req: Request, res: Response) => {
+  GetWatchedFromUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     const userId = req.params.userid;
-    const watchedMoviesFromUser = await WatchedMovie.findAll({
-      where: { userId: userId },
-    });
-    res.json(watchedMoviesFromUser);
+    const watchedMoviesFromUser = await this._watchedMovieService.GetByUserIdAsync(
+      userId
+    );
+    return res.status(200).json(watchedMoviesFromUser);
   };
 
-  addMovieToWatchedMovies = async (req: Request, res: Response) => {
+  AddMovieToWatchedMoviesAsync = async (
+    req: Request,
+    res: Response,
+    next: Function
+  ) => {
     const body: WatchedMovieCreate = res.locals.body;
     let watchedMovieId = uuidv4();
     const watchedMovie = {
@@ -25,27 +47,29 @@ export class WatchedMovieController {
       userId: body.userId,
     };
     try {
-      let result = await WatchedMovie.create({
-        id: watchedMovie.id,
-        movieId: watchedMovie.movieId,
-        userId: watchedMovie.userId,
-      });
-      res.status(200).json({
+      let result = await this._watchedMovieService.PostAsync(watchedMovie);
+      return res.status(200).json({
         message: "Movie added to watched movies",
         result,
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         message:
           "Movie is already on the list or you're doing something not allowed.",
       });
     }
   };
 
-  removeWatchedMovie = async (req: Request, res: Response) => {
+  RemoveWatchedMovieAsync = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     const id = req.params.id;
-    const watchedMovie = await WatchedMovie.destroy({ where: { movieId: id } });
-    res.json({
+    const watchedMovie = await this._watchedMovieService.RemoveByMovieIdAsync(
+      id
+    );
+    return res.status(204).json({
       message: "Movie removed from watched movies",
       watchedMovie,
     });
