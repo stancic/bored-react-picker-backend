@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { RatedMovie, RatedMovieCreate } from "../models/RatedMovieModel";
-import { plainToClass } from "class-transformer";
-import { validate } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
 
 export class RatedMovieController {

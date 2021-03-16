@@ -1,13 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "./index";
-import {
-  IsDefined,
-  Length,
-  MaxLength,
-  Matches,
-  MinLength,
-  IsUUID,
-} from "class-validator";
+import { IsDefined, MaxLength, Matches, MinLength } from "class-validator";
 
 const testUsernameRegEx = /^(?=.{4,31}$)(?![_\W])(?![_\W]{2})\w+(?<!(_{1})[_\W])$/;
 const testEmailRegEx = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;

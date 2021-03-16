@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { WatchedMovie, WatchedMovieCreate } from "../models/WatchedMovieModel";
-import { plainToClass } from "class-transformer";
 import { v4 as uuidv4 } from "uuid";
 
 export class WatchedMovieController {
