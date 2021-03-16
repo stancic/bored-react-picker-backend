@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { User, UserCreate } from "../models/UserModel";
+import { UserCreate } from "../models/UserModel";
 import { v4 as uuidv4 } from "uuid";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
